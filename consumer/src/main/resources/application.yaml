@@ -1,19 +1,26 @@
 server:
   port: 8081
 
+kafka:
+  bootstrap-servers: localhost:9092,localhost:9093,localhost:9094
+  group-id: ${GROUP_ID:test-group}
+  template:
+    default-topic: ${KAFKA_DEFAULT_TOPIC:simple-random-topic}
+    orders-topic: ${KAFKA_ORDERS_TOPIC:domain-orders-topic}
 
-spring:
-  kafka:
-    bootstrap-servers:
-      - localhost:9092
-      - localhost:9093
-      - localhost:9094
-    consumer:
-      group-id: random-consumer
-      auto-offset-reset: earliest
-      key-serializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-serializer: org.apache.kafka.common.serialization.StringDeserializer
+# config for autoconfiguration via application .yaml
+#spring:
+#  kafka:
+#    bootstrap-servers:
+#      - localhost:9092
+#      - localhost:9093
+#      - localhost:9094
+#    consumer:
+#      group-id: random-consumer
+#      auto-offset-reset: earliest
+#      key-serializer: org.apache.kafka.common.serialization.StringDeserializer
+#      value-serializer: org.apache.kafka.common.serialization.StringDeserializer
 
 message:
   processing:
-    time: 2000
+    time: 0

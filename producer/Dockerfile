@@ -1,4 +1,3 @@
-
 ######## 1. Maven build stage ########
 FROM maven:3.8.3-openjdk-17 as maven_build
 WORKDIR /app
@@ -19,7 +18,7 @@ RUN mvn clean package  -Dmaven.test.skip
 FROM openjdk:17-jdk-slim
 WORKDIR /app
 
-COPY --from=maven_build /app/target/producer.jar .
+COPY --from=maven_build /app/target/*.jar ./producer.jar
 
 ENTRYPOINT java -jar producer.jar \
                     --spring.kafka.bootstrap-servers=$BROKER

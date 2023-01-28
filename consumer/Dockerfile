@@ -18,7 +18,7 @@ RUN mvn clean package  -Dmaven.test.skip
 FROM openjdk:17-jdk-slim
 WORKDIR /app
 
-COPY --from=maven_build /app/target/consumer.jar .
+COPY --from=maven_build /app/target/*.jar ./consumer.jar
 
 ENTRYPOINT java -jar consumer.jar \
                     --spring.kafka.bootstrap-servers=$BROKER \

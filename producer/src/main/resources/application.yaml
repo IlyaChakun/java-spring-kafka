@@ -1,14 +1,22 @@
 server:
   port: 8080
 
-spring:
-  kafka:
-    bootstrap-servers:
-      - localhost:9092
-      - localhost:9093
-      - localhost:9094
-    template:
-      default-topic: random-number
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+# custom configuration via Configuration files
+kafka:
+  bootstrap-servers: localhost:9092,localhost:9093,localhost:9094
+  template:
+    default-topic: ${KAFKA_DEFAULT_TOPIC:simple-random-topic}
+    orders-topic: ${KAFKA_ORDERS_TOPIC:domain-orders-topic}
+
+# config for autoconfiguration via application .yaml
+#spring:
+#  kafka:
+#    bootstrap-servers:
+#      - localhost:9092
+#      - localhost:9093
+#      - localhost:9094
+#    template:
+#      default-topic: random-number
+#    producer:
+#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      value-serializer: org.apache.kafka.common.serialization.StringSerializer

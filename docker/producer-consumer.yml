@@ -6,17 +6,17 @@ services:
     build:
       context: ../producer
       dockerfile: Dockerfile
-    ports:
-      - "8081:8081"
+#    ports:
+#      - "8081:8081"
     environment:
-      - BROKER=kafka1:19091
+      - BROKER=host.docker.internal:29092
 
   consumer:
     build:
       context: ../consumer
       dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
+    #    ports:
+    #      - "8080:8080"
     environment:
-      - BROKER=kafka2:19092
-      - MESSAGE_PROCESSING_TIME=0
+      - BROKER=host.docker.internal:29093
+      - MESSAGE_PROCESSING_TIME=2000
