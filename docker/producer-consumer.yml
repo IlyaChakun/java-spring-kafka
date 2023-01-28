@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+
+  producer:
+    build:
+      context: ../producer
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - BROKER=kafka1:19091
+
+  consumer:
+    build:
+      context: ../consumer
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - BROKER=kafka2:19092
+      - MESSAGE_PROCESSING_TIME=0
