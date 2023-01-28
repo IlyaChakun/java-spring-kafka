@@ -13,11 +13,8 @@ import java.net.UnknownHostException;
 @RequiredArgsConstructor
 public class DefaultSchedulerProducer {
 
-    @Value("${kafka.template.default-topic}")
+    @Value("${kafka.simple.topic}")
     private String topicName;
-
-    @Value("${kafka.template.orders-topic}")
-    private String orders;
 
     private final KafkaSenderService kafkaSenderService;
 
@@ -29,12 +26,9 @@ public class DefaultSchedulerProducer {
 
         this.kafkaSenderService.sendMessage("Number : " + random, topicName);
 
-        this.kafkaSenderService.sendMessage("Orders Number : " + random, orders);
-
         //just for logging
         String hostName = InetAddress.getLocalHost().getHostName();
-        System.out.printf("%s produced %d%n", hostName, random);
-        System.out.printf("%s produced %d%n", hostName, random);
+        System.out.printf("TopicName: " + topicName + " %s produced %d%n", hostName, random);
     }
 
 }

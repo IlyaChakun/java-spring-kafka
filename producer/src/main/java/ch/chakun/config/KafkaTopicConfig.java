@@ -9,20 +9,26 @@ import org.springframework.kafka.config.TopicBuilder;
 @Configuration
 class KafkaTopicConfig {
 
-    @Value("${kafka.template.default-topic}")
+    @Value("${kafka.simple.topic}")
     private String defaultTopic;
 
-    @Value("${kafka.template.orders-topic}")
+    @Value("${kafka.orders.topic}")
     private String ordersTopic;
 
     @Bean
     public NewTopic defaultTopic() {
-        return TopicBuilder.name(defaultTopic).build();
+        return TopicBuilder.name(defaultTopic)
+                .partitions(1)
+                .replicas(1)
+                .build();
     }
 
     @Bean
     public NewTopic ordersTopic() {
-        return TopicBuilder.name(ordersTopic).build();
+        return TopicBuilder.name(ordersTopic)
+                .partitions(1)
+                .replicas(1)
+                .build();
     }
 
 }

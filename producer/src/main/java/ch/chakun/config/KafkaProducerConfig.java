@@ -1,27 +1,25 @@
 package ch.chakun.config;
 
+import ch.chakun.dto.AbstractDto;
 import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.serialization.ByteArraySerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
-import org.springframework.kafka.core.RoutingKafkaTemplate;
+import org.springframework.kafka.support.serializer.JsonSerializer;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 @Configuration
 public class KafkaProducerConfig {
-    @Value("${kafka.bootstrap-servers}")
+    @Value("${kafka.general.bootstrap-servers}")
     private String bootstrapServers;
 
+    // String producer
     @Bean
     public Map<String, Object> producerConfigs() {
         Map<String, Object> props = new HashMap<>();
@@ -36,37 +34,6 @@ public class KafkaProducerConfig {
         return props;
     }
 
-    @Bean
-    public RoutingKafkaTemplate routingTemplate(GenericApplicationContext context) {
-
-        Map<String, Object> props = new HashMap<>();
-
-        // ProducerFactory with Bytes serializer
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
-                bootstrapServers);
-        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
-                StringSerializer.class);
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
-                ByteArraySerializer.class);
-
-        DefaultKafkaProducerFactory<Object, Object> bytesPF =
-                new DefaultKafkaProducerFactory<>(props);
-        context.registerBean(DefaultKafkaProducerFactory.class, "bytesPF", bytesPF);
-
-        // ProducerFactory with String serializer
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
-                StringSerializer.class);
-
-        DefaultKafkaProducerFactory<Object, Object> stringPF =
-                new DefaultKafkaProducerFactory<>(props);
-
-        // Map with producers
-        Map<Pattern, ProducerFactory<Object, Object>> map = new LinkedHashMap<>();
-        map.put(Pattern.compile("simple-.*"), stringPF);
-        map.put(Pattern.compile("domain-.*"), bytesPF);
-
-        return new RoutingKafkaTemplate(map);
-    }
 
     @Bean
     public ProducerFactory<String, String> producerFactory() {
@@ -78,4 +45,22 @@ public class KafkaProducerConfig {
         return new KafkaTemplate<>(producerFactory());
     }
 
+
+    // Object producer
+    @Bean
+    public KafkaTemplate<String, AbstractDto> objectKafkaTemplate() {
+        return new KafkaTemplate<>(objectProducerFactory());
+    }
+
+    @Bean
+    public ProducerFactory<String, AbstractDto> objectProducerFactory() {
+
+        Map<String, Object> config = new HashMap<>();
+
+        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+
+        return new DefaultKafkaProducerFactory<>(config);
+    }
 }

@@ -14,18 +14,10 @@ public class KafkaDefaultMessageServiceConsumer {
     private long processingTime;
 
     @KafkaListener(
-            topics = "${kafka.template.default-topic}"
+            topics = "${kafka.simple.topic}",
+            groupId = "${kafka.simple.group-id}"
     )
     public void defaultConsumer(String message) throws UnknownHostException, InterruptedException {
-
-        String hostName = InetAddress.getLocalHost().getHostName();
-
-        System.out.println(String.format("%s consumed %s", hostName, message));
-        Thread.sleep(processingTime);
-    }
-
-    @KafkaListener(topics = "${kafka.template.orders-topic}")
-    public void consumer(String message) throws UnknownHostException, InterruptedException {
 
         String hostName = InetAddress.getLocalHost().getHostName();
 

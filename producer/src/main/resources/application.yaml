@@ -3,10 +3,14 @@ server:
 
 # custom configuration via Configuration files
 kafka:
-  bootstrap-servers: localhost:9092,localhost:9093,localhost:9094
-  template:
-    default-topic: ${KAFKA_DEFAULT_TOPIC:simple-random-topic}
-    orders-topic: ${KAFKA_ORDERS_TOPIC:domain-orders-topic}
+  general:
+    bootstrap-servers: localhost:9092,localhost:9093,localhost:9094
+
+  simple:
+    topic: ${KAFKA_DEFAULT_TOPIC:simple-random-topic}
+
+  orders:
+    topic: ${KAFKA_DEFAULT_TOPIC:domain-orders-topic}
 
 # config for autoconfiguration via application .yaml
 #spring:

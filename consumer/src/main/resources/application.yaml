@@ -2,11 +2,17 @@ server:
   port: 8081
 
 kafka:
-  bootstrap-servers: localhost:9092,localhost:9093,localhost:9094
-  group-id: ${GROUP_ID:test-group}
-  template:
-    default-topic: ${KAFKA_DEFAULT_TOPIC:simple-random-topic}
-    orders-topic: ${KAFKA_ORDERS_TOPIC:domain-orders-topic}
+  general:
+    bootstrap-servers: localhost:9092,localhost:9093,localhost:9094
+
+  simple:
+    group-id: ${GROUP_ID:test-group}
+    topic: ${KAFKA_DEFAULT_TOPIC:simple-random-topic}
+
+  orders:
+    group-id: ${GROUP_ID:objects-group}
+    topic: ${KAFKA_DEFAULT_TOPIC:domain-orders-topic}
+
 
 # config for autoconfiguration via application .yaml
 #spring:
